@@ -32,15 +32,8 @@ def save_model_snapshot(instance):
 
     file_hash = str(uuid4())
 
-    all_fields = [instance._meta.get_field_by_name(f)[0] for f
-                  in instance._meta.get_all_field_names()]
-
-    # saving FK and M2M fields makes not sense - exclude it
-    exclude = [f.name for f in all_fields if isinstance(f, RelatedField)]
-    _dict = model_to_dict(instance, exclude=exclude)
-
     with open(os.path.join(prev, file_hash), 'wb') as f:
-        pickle.dump(_dict, f)
+        pickle.dump(instance, f)
 
     return file_hash
 
@@ -56,6 +49,5 @@ def load_from_shapshot(model, file_hash):
         file_hash
     )
 
-    with open(path, 'rb') as w:
-        data_dict = pickle.load(w)
-        return model(**data_dict)
+    with open(path, 'rb') as f:
+        return pickle.load(f)
