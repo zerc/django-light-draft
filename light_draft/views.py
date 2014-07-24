@@ -24,3 +24,8 @@ class BaseDraftView(DetailView):
             self.model, self.request.GET.get('hash'))
 
         return self.__object
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(BaseDraftView, self).get_context_data(*args, **kwargs)
+        context['is_draft'] = True
+        return context
