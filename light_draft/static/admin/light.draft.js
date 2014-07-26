@@ -1,9 +1,12 @@
 (function ($) {
     $(function () {
         var href = location.href + 'preview/',
-            button = $('<li><a href="'+href+'" class="previewlink" target="_blank">Предпросмотр</a></li>');
+            button = $('<li><a href="'+href+'" class="previewlink" target="_blank">Draft preview</a></li>');
 
-        $('.object-tools > li > a.historylink').parent().before(button);
+        $('.object-tools > li > a.viewsitelink')
+            .closest('ul')
+            .find('li:first')
+            .before(button);
 
         button.click(function () {
             var form = $('form[method="post"][enctype="multipart/form-data"]'),
@@ -35,7 +38,7 @@
                 return true;
             }
 
-            alert('Произошла ошибка формирования предпросмотра. Примите наши глубочайшие сожаления!');
+            alert('An error has occurred');
             return false;
         });
     });
