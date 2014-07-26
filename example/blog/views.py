@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+from light_draft.views import BaseDraftView
+
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
@@ -12,6 +14,6 @@ class BlogPostListView(ListView):
     context_object_name = 'posts'
 
 
-class BlogPostDetailView(DetailView):
+class BlogPostDetailView(BaseDraftView):
     model = BlogPost
     context_object_name = 'post'

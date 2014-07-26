@@ -11,7 +11,11 @@ class BaseDraftView(DetailView):
     """
     View for loading data from model `snapshot`
     """
-    template_name_suffix = '_preview'
+    def get_template_names(self):
+        names = super(BaseDraftView, self).get_template_names()
+        preview = names[0].replace('.html', '_preview.html')
+        names.insert(0, preview)
+        return names
 
     def get_object(self, *args, **kwargs):
         if getattr(self, '__object', None):
@@ -27,5 +31,5 @@ class BaseDraftView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BaseDraftView, self).get_context_data(*args, **kwargs)
-        context['is_draft'] = True
+        context['is_draft_preview'] = True
         return context

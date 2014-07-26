@@ -41,13 +41,14 @@ class DraftAdmin(admin.ModelAdmin):
 
         ModelForm = self.get_form(request)
         if request.method == 'POST':
-            form = ModelForm(request.POST, request.FILES)
+            instance = self.get_object(request, *args, **kwargs)
+            form = ModelForm(request.POST, request.FILES, instance=instance)
             form.just_preivew = True
 
             if form.is_valid():
                 file_hash = save_model_snapshot(form.instance)
                 return HttpResponse(
-                    form.instance.get_draft_url() + '?hash=' + file_hash)
+                    form.instance.get_absolute_url() + '?hash=' + file_hash)
 
         raise Http404
 
