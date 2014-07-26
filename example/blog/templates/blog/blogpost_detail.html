@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>{{ post }} :: Example blog app</title>
+</head>
+<body>
+    <a href="{% url 'posts_list' %}">
+        Blog list
+    </a> &mdash; {{ post }}
+
+    <br>
+
+    <h1>{{ post }}</h1>
+
+    {{ post.lead|safe }}
+
+    <hr>
+
+    {{ post.body|safe }}
+</body>
+</html>

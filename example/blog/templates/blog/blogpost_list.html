@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title>Example blog app</title>
+</head>
+<body>
+    <h1>Blog posts</h1>
+
+    <ul>
+    {% for post in posts %}
+        <li>
+            <a href="{{ post.get_absolute_url }}">{{ post }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
