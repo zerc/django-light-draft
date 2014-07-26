@@ -50,3 +50,6 @@ class DraftAdmin(admin.ModelAdmin):
                     form.instance.get_draft_url() + '?hash=' + file_hash)
 
         raise Http404
+
+    class Media:
+        js = ('admin/light.draft.js',)
