@@ -21,13 +21,12 @@ class BaseDraftView(DetailView):
         if getattr(self, '__object', None):
             return self.__object
 
-        if not 'hash' in self.request.GET:
-            raise Http404
+        if 'hash' in self.request.GET:
+            self.__object = load_from_shapshot(
+                self.model, self.request.GET.get('hash'))
+            return self.__object
 
-        self.__object = load_from_shapshot(
-            self.model, self.request.GET.get('hash'))
-
-        return self.__object
+        return super(BaseDraftView, self).get_object(*args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
         context = super(BaseDraftView, self).get_context_data(*args, **kwargs)
