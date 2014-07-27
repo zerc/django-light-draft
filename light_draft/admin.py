@@ -40,16 +40,43 @@ class DraftAdmin(admin.ModelAdmin):
             raise PermissionDenied
 
         ModelForm = self.get_form(request)
-        if request.method == 'POST':
-            instance = self.get_object(request, *args, **kwargs)
-            form = ModelForm(request.POST, request.FILES, instance=instance)
-            form.just_preivew = True
+        obj = self.get_object(request, *args, **kwargs)
 
-            if form.is_valid():
-                file_hash = save_model_snapshot(form.instance)
-                return HttpResponse(
-                    form.instance.get_absolute_url() + '?hash=' + file_hash)
+        if request.method != 'POST':
+            raise Http404
 
+        # Work with related formsets (collection instances)
+        inline_instances = self.get_inline_instances(request, obj)
+        prefixes = {}
+        items = {}
+        for FormSet, inline in zip(self.get_formsets(request, obj), inline_instances):
+            prefix = FormSet.get_default_prefix()
+            prefixes[prefix] = prefixes.get(prefix, 0) + 1
+            if prefixes[prefix] != 1 or not prefix:
+                prefix = "%s-%s" % (prefix, prefixes[prefix])
+
+            formset = FormSet(request.POST, request.FILES,
+                              instance=obj, prefix=prefix,
+                              queryset=inline.get_queryset(request))
+
+            if formset.is_valid():
+                # group items by related_name
+                items[FormSet.get_default_prefix()] \
+                    = formset.save(commit=False)
+
+        form = ModelForm(request.POST, request.FILES, instance=obj)
+        form.just_preivew = True
+
+        if form.is_valid():
+            file_hash = save_model_snapshot(
+                form.instance,
+                related_objects=items
+            )
+
+            return HttpResponse(
+                form.instance.get_absolute_url() + '?hash=' + file_hash)
+
+        # TODO: send error message when form is not valid!
         raise Http404
 
     class Media:

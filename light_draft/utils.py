@@ -12,7 +12,7 @@ from django.forms.models import model_to_dict
 TMP_DIR = getattr(settings, 'TMP_DIR', 'tmp')
 
 
-def save_model_snapshot(instance):
+def save_model_snapshot(instance, related_objects=None):
     """
     Serialize instance into .pickle cache file
     """
@@ -32,8 +32,14 @@ def save_model_snapshot(instance):
 
     file_hash = str(uuid4())
 
+    if related_objects and isinstance(related_objects, dict):
+        data = {'instance': instance}
+        data.update(related_objects)
+    else:
+        data = instance
+
     with open(os.path.join(prev, file_hash), 'wb') as f:
-        pickle.dump(instance, f)
+        pickle.dump(data, f)
 
     return file_hash
 
@@ -50,4 +56,13 @@ def load_from_shapshot(model, file_hash):
     )
 
     with open(path, 'rb') as f:
-        return pickle.load(f)
+        raw_data = pickle.load(f)
+
+    if isinstance(raw_data, dict):
+        instance = raw_data.pop('instance')
+
+        for k, v in raw_data.items():
+            setattr(instance, '{}__draft'.format(k), v)
+
+        return instance
+    return raw_data
