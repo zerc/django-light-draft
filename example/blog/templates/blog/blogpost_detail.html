@@ -20,7 +20,7 @@
 
     <h2>Extra information</h2>
 
-    {% for text_block in post.blocks.all %}
+    {% for text_block in post.blocks__draft|default:post.blocks.all %}
         <h4>{{ text_block }}</h4>
         <p>{{ text_block.body }}</p>
         <hr>

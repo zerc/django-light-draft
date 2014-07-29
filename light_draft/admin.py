@@ -59,10 +59,9 @@ class DraftAdmin(admin.ModelAdmin):
                               instance=obj, prefix=prefix,
                               queryset=inline.get_queryset(request))
 
-            if formset.is_valid():
-                # group items by related_name
-                items[FormSet.get_default_prefix()] \
-                    = formset.save(commit=False)
+            items[FormSet.get_default_prefix()] = [
+                f.save(commit=False) for f in formset
+                if f.is_valid()]
 
         form = ModelForm(request.POST, request.FILES, instance=obj)
         form.just_preivew = True
