@@ -56,6 +56,13 @@ admin.register(Page, PageAdmin)
 
 In preview mode yours Page instance will have  ` .blocks__draft` attr to access the related models.
 
+Example of using it in Django templates:
+
+```
+{% for text_block in page.blocks__draft|default:page.blocks.all %}
+    ...
+{% endfor %}
+```
 
 See `example/blog` app for more details.
 
