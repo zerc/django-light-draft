@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'light_draft',
+    'south',
 
     'blog',
 
