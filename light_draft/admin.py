@@ -75,8 +75,8 @@ class DraftAdmin(admin.ModelAdmin):
             return HttpResponse(
                 form.instance.get_absolute_url() + '?hash=' + file_hash)
 
-        # TODO: send error message when form is not valid!
-        raise Http404
+        return HttpResponse(str(form.errors))
+
 
     class Media:
         js = ('admin/light.draft.js',)

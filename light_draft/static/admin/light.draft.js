@@ -22,6 +22,8 @@
                 });
             }
 
+            $('ul.errorlist').remove();
+
             $.ajax({
                 type: "POST",
                 url: href,
@@ -29,7 +31,11 @@
                 dataType: 'text',
                 async: false,
                 success: function (response) {
-                    link = response;
+                    if (response.indexOf('?hash=') > 0) {
+                        link = response;
+                    } else {
+                        $('ul.object-tools').after(response);
+                    }
                 }
             });
 
@@ -38,7 +44,6 @@
                 return true;
             }
 
-            alert('An error has occurred');
             return false;
         });
     });
