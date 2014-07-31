@@ -1,15 +1,14 @@
 # coding: utf-8
 from __future__ import unicode_literals
+
 import os
 import cPickle as pickle
 from uuid import uuid4
 
-from django.conf import settings
 from django.db.models.fields.related import RelatedField
 from django.forms.models import model_to_dict
 
-
-DRAFT_TMP_DIR = getattr(settings, 'DRAFT_TMP_DIR', 'tmp')
+from .settings import DRAFT_TMP_DIR
 
 
 def save_model_snapshot(instance, related_objects=None):
