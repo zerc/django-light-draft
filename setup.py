@@ -1,5 +1,5 @@
 # coding: utf-8
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='django-light-draft',
@@ -11,7 +11,8 @@ setup(
     url='https://github.com/zerc/django-light-draft',
     license='MIT',
 
-    packages=['light_draft'],
+    packages=find_packages(exclude=['ez_setup', 'tests', 'tests.*']),
+    include_package_data=True,
     install_requires=[
         'django>=1.6',
         'South==1.0',
