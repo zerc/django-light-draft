@@ -5,10 +5,19 @@ Preview changes without saving the data in the db.
 
 Install
 -
+Usual way:
 
-Clone this repo inside your PYTHON PATH:
+`pip install django-light-draft`
 
-`git clone git@github.com:zerc/django-light-draft.git`
+
+Edit you settings.py:
+```
+INSTALLED_APPS = (
+    ...
+
+    'light_draft',
+)
+```
 
 Then you need just inherit admin and detail views like this:
 
@@ -28,7 +37,7 @@ class MyModelDetailView(BaseDraftView):
     ...
 ```
 
-For access to many-to-one relation (inline forms in you admin change view) use  `model.<related_name>__draf`. Example:
+For access to many-to-one relation (inline forms in you admin change view) use  `model.<related_name>__draft`. Example:
 
 ```
 # models.py
