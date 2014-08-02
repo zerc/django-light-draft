@@ -4,7 +4,8 @@ django-light-draft
 Preview changes without saving data into a db.
 
 Install
--
+-------
+
 Usual way:
 
 ::
@@ -85,7 +86,7 @@ Example of using it in Django templates:
 See **example/blog** app for more details.
 
 NOTES
--
+-----
 
 1. Your models must define their own  **.get_absoulte_url** method.
 2. Preview for m2m relations not supported yet.
