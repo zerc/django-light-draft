@@ -9,12 +9,13 @@ Usual way:
 
 ::
 
-    pip install django-light-draft`
+    pip install django-light-draft
 
 
 Edit your settings.py:
 
-::
+.. code:: python
+
     INSTALLED_APPS = (
         ...
 
@@ -27,7 +28,7 @@ Then you just need to inherit admin and detail views like this:
 
 admin.py:
 
-::
+.. code:: python
 
     from light_draft.admin import DraftAdmin
 
@@ -36,16 +37,18 @@ admin.py:
 
 views.py
 
-::
+.. code:: python
 
     from light_draft.views import BaseDraftView
 
     class MyModelDetailView(BaseDraftView):
         ...
 
-To access many-to-one relation (inline forms in your admin change view) use  **model.<related_name>__draft**. Example:
+To access many-to-one relation (inline forms in your admin change view) use  **model.<related_name>__draft**. 
 
-::
+Example:
+
+.. code:: python
 
     # models.py
     class Page(models.Model):
