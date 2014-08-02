@@ -8,6 +8,7 @@ setup(
     author_email='zero13cool@yandex.ru',
 
     description='Preview changes without saving the data into db.',
+    long_description=open('README.rst').read(),
     url='https://github.com/zerc/django-light-draft',
     license='MIT',
 

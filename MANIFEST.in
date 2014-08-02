@@ -1,2 +1,3 @@
 include LICENSE
+include README.rst
 include light_draft/static/*/*.js
