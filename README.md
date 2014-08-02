@@ -1,7 +1,7 @@
 django-light-draft
 ==================
 
-Preview changes without saving the data in the db.
+Preview changes without saving data into a db.
 
 Install
 -
@@ -10,7 +10,7 @@ Usual way:
 `pip install django-light-draft`
 
 
-Edit you settings.py:
+Edit your settings.py:
 ```
 INSTALLED_APPS = (
     ...
@@ -19,7 +19,7 @@ INSTALLED_APPS = (
 )
 ```
 
-Then you need just inherit admin and detail views like this:
+Then you just need to inherit admin and detail views like this:
 
 admin.py:
 ```
@@ -37,7 +37,7 @@ class MyModelDetailView(BaseDraftView):
     ...
 ```
 
-For access to many-to-one relation (inline forms in you admin change view) use  `model.<related_name>__draft`. Example:
+To access many-to-one relation (inline forms in your admin change view) use  `model.<related_name>__draft`. Example:
 
 ```
 # models.py
@@ -63,7 +63,7 @@ admin.register(Page, PageAdmin)
 
 ```
 
-In preview mode yours Page instance will have  ` .blocks__draft` attr to access the related models.
+In preview mode your Page instance will have  ` .blocks__draft` attr to access the related models.
 
 Example of using it in Django templates:
 
@@ -78,5 +78,5 @@ See `example/blog` app for more details.
 NOTES
 -
 
-1. You models must define his own  `.get_absoulte_url ` method
-2. Preview for m2m relations now not support.
+1. Your models must define their own  `.get_absoulte_url ` method.
+2. Preview for m2m relations not supported yet.
