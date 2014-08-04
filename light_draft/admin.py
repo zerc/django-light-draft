@@ -45,9 +45,6 @@ class DraftAdmin(admin.ModelAdmin):
         if request.method != 'POST':
             raise Http404
 
-        print(request.POST)
-
-
         # Work with related formsets (collection instances)
         inline_instances = self.get_inline_instances(request, obj)
         prefixes = {}
