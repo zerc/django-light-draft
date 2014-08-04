@@ -1,0 +1,3 @@
+0.2a
+- add support of m2m relations
+- rejection of bad syntax like this: `instance.<relative_field_name>__draft`. Now you can use the usual - `instance.<related_field>.all()`
