@@ -7,6 +7,9 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 
 
+nullable = dict(blank=True, null=True)
+
+
 @python_2_unicode_compatible
 class Category(models.Model):
     title = models.CharField('title', max_length=255)
@@ -20,6 +23,18 @@ class Category(models.Model):
 
 
 @python_2_unicode_compatible
+class Tag(models.Model):
+    title = models.CharField('title', max_length=255)
+
+    class Meta:
+        verbose_name = 'tag'
+        verbose_name_plural = 'tags'
+
+    def __str__(self):
+        return self.title
+
+
+@python_2_unicode_compatible
 class BlogPost(models.Model):
     title = models.CharField('title', max_length=255)
 
@@ -27,7 +42,10 @@ class BlogPost(models.Model):
     body = models.TextField('body')
 
     category = models.ForeignKey(
-        Category, related_name='blog_posts', blank=True, null=True)
+        Category, related_name='blog_posts', **nullable)
+
+    tags = models.ManyToManyField(
+        Tag, related_name='blog_post', **nullable)
 
     class Meta:
         verbose_name = 'blog post'
