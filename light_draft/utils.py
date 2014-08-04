@@ -55,9 +55,10 @@ def load_from_shapshot(model, file_hash):
 
     instance = raw_data.pop('instance')
     related_objects = raw_data.pop('related_objects')
+    instance._prefetched_objects_cache = related_objects
 
-    if related_objects:
-        for k, v in related_objects.items():
-            setattr(instance, '{}__draft'.format(k), v)
+    # if related_objects:
+    #     for k, v in related_objects.items():
+    #         setattr(instance, '{}__draft'.format(k), v)
 
     return instance
