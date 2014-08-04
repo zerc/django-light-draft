@@ -45,6 +45,9 @@ class DraftAdmin(admin.ModelAdmin):
         if request.method != 'POST':
             raise Http404
 
+        print(request.POST)
+
+
         # Work with related formsets (collection instances)
         inline_instances = self.get_inline_instances(request, obj)
         prefixes = {}
@@ -67,6 +70,18 @@ class DraftAdmin(admin.ModelAdmin):
         form.just_preivew = True
 
         if form.is_valid():
+            # Also proccess m2m fields
+            opts = form.instance._meta
+            for f in opts.many_to_many + opts.virtual_fields:
+                if not hasattr(f, 'save_form_data'):
+                    continue
+                if form._meta.fields and f.name not in form._meta.fields:
+                    continue
+                if form._meta.exclude and f.name in form._meta.exclude:
+                    continue
+                if f.name in form.cleaned_data:
+                    items[f.name] = form.cleaned_data[f.name]
+
             file_hash = save_model_snapshot(
                 form.instance,
                 related_objects=items

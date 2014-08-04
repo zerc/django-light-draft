@@ -10,6 +10,7 @@
 
         button.click(function () {
             var form = $('form[method="post"][enctype="multipart/form-data"]'),
+                m2m = form.find('select[multiple="multiple"][id$="_to"]'),
                 link;
 
             if (window.CKEDITOR) {
@@ -24,6 +25,9 @@
 
             $('ul.errorlist').remove();
 
+            // Select m2m befor post data
+            m2m.children().attr('selected', 'selected');
+
             $.ajax({
                 type: "POST",
                 url: href,
@@ -31,6 +35,9 @@
                 dataType: 'text',
                 async: false,
                 success: function (response) {
+                    // Deselect m2m
+                    m2m.children().attr('selected', null);
+
                     if (response.indexOf('?hash=') > 0) {
                         link = response;
                     } else {

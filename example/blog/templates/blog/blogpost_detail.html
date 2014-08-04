@@ -9,7 +9,16 @@
 
     <br>
 
-    <h1>{{ post }} <small style="font-size:12px;">{{ post.category|default:'' }}</small></h1>
+    <h1>
+        {{ post }}
+        <small style="font-size:12px;">{{ post.category|default:'' }}</small>
+        <div  style="font-size:12px;">
+            {% for tag in post.tags__draft|default:post.tags.all %}
+                {{ tag }}
+                {% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </div>
+    </h1>
 
     {{ post.lead|safe }}
 
