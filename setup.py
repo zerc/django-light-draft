@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-light-draft',
-    version='0.2a',
+    version='0.3.1',
     author='Vladimir Savin',
     author_email='zero13cool@yandex.ru',
 
