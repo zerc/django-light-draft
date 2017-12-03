@@ -14,7 +14,7 @@ class DraftAdmin(admin.ModelAdmin):
     Mixin with draft view support
     """
     def get_urls(self):
-        from django.conf.urls import patterns, url
+        from django.conf.urls import url
 
         def wrap(view):
             def wrapper(*args, **kwargs):
@@ -26,11 +26,13 @@ class DraftAdmin(admin.ModelAdmin):
         if not hasattr(self.model, 'get_draft_url'):
             super(DraftAdmin, self).get_urls()
 
-        return patterns('',
-                        url(r'^(.+)/preview/$',
-                            wrap(self.preview_view),
-                            name='%s_%s_preview' % info),
-                        ) + super(DraftAdmin, self).get_urls()
+        return [
+            url(
+                r'^(.+)/preview/$',
+                wrap(self.preview_view),
+                name='%s_%s_preview' % info
+            ),
+        ] + list(super(DraftAdmin, self).get_urls())
 
     def preview_view(self, request, *args, **kwargs):
         model = self.model
@@ -88,7 +90,6 @@ class DraftAdmin(admin.ModelAdmin):
                 form.instance.get_absolute_url() + '?hash=' + file_hash)
 
         return HttpResponse(str(form.errors))
-
 
     class Media:
         js = ('admin/light.draft.js',)

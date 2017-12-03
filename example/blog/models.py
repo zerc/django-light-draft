@@ -44,8 +44,7 @@ class BlogPost(models.Model):
     category = models.ForeignKey(
         Category, related_name='blog_posts', **nullable)
 
-    tags = models.ManyToManyField(
-        Tag, related_name='blog_post', **nullable)
+    tags = models.ManyToManyField(Tag, related_name='blog_post')
 
     class Meta:
         verbose_name = 'blog post'
