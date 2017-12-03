@@ -69,7 +69,7 @@ class DraftAdmin(admin.ModelAdmin):
         if form.is_valid():
             # Also proccess m2m fields
             opts = form.instance._meta
-            for f in list(opts.many_to_many) + opts.virtual_fields:
+            for f in tuple(opts.many_to_many) + tuple(opts.virtual_fields):
                 if not hasattr(f, 'save_form_data'):
                     continue
                 if form._meta.fields and f.name not in form._meta.fields:
