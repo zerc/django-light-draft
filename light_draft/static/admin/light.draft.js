@@ -1,6 +1,6 @@
 (function ($) {
     $(function () {
-        var href = location.href.replace(/\/change\/?$/, '/preview/'),
+        var href = location.href.replace(/(\/change\/?$|\/$)/, '') + '/preview/',  // TODO: generate an URL
             button = $('<li><a href="'+href+'" class="previewlink" target="_blank">Draft preview</a></li>');
 
         $('.object-tools > li > a.viewsitelink')
