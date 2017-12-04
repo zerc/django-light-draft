@@ -1,7 +1,7 @@
 django-light-draft
 ==================
 
-Preview changes without saving data into a db.
+Preview model changes without saving the data into the database.
 
 Install
 -------
@@ -52,4 +52,4 @@ See **example/blog** app for more details.
 NOTES
 -----
 
-1. Your models must define their own  **.get_absoulte_url** method.
+1. Your models have to define their own  **.get_absoulte_url** method.
