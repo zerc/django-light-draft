@@ -25,8 +25,6 @@ SECRET_KEY = '*6i3013ifgdd2*$a)08!(mmh@4q1^g^%(gvlt5+9n!aiga2sl_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -41,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'light_draft',
-    'south',
 
     'blog',
 
@@ -89,3 +86,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+            ],
+        },
+    },
+]

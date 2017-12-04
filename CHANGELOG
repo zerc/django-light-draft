@@ -1,3 +1,6 @@
+0.4
+- Support (kind of) 1.8 <= Django < 2.0
+
 0.2a
-- add support of m2m relations
-- rejection of bad syntax like this: `instance.<relative_field_name>__draft`. Now you can use the usual - `instance.<related_field>.all()`
+- Add support of m2m relations
+- Rejection of bad syntax like this: `instance.<relative_field_name>__draft`. Now you can use the usual - `instance.<related_field>.all()`

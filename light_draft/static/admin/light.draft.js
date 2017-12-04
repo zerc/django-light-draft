@@ -1,6 +1,6 @@
 (function ($) {
     $(function () {
-        var href = location.href + 'preview/',
+        var href = location.href.replace(/(\/change\/?$|\/$)/, '') + '/preview/',  // TODO: generate an URL
             button = $('<li><a href="'+href+'" class="previewlink" target="_blank">Draft preview</a></li>');
 
         $('.object-tools > li > a.viewsitelink')
@@ -25,7 +25,7 @@
 
             $('ul.errorlist').remove();
 
-            // Select m2m befor post data
+            // Select m2m before post data
             m2m.children().attr('selected', 'selected');
 
             $.ajax({

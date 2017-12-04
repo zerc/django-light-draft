@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from functools import update_wrapper
 
+from django.core.exceptions import ImproperlyConfigured
 from django.contrib import admin
 from django.http import Http404, HttpResponse
 from django.core.exceptions import PermissionDenied
@@ -14,23 +15,28 @@ class DraftAdmin(admin.ModelAdmin):
     Mixin with draft view support
     """
     def get_urls(self):
-        from django.conf.urls import patterns, url
+        from django.conf.urls import url
 
         def wrap(view):
             def wrapper(*args, **kwargs):
                 return self.admin_site.admin_view(view)(*args, **kwargs)
             return update_wrapper(wrapper, view)
 
+        if not hasattr(self.model, 'get_absolute_url'):
+            raise ImproperlyConfigured(
+                "The model %s should have `.get_absolute_url` method "
+                "to make possible to use the light-draft feature." % self.model
+            )
+
         info = self.model._meta.app_label, self.model._meta.model_name
 
-        if not hasattr(self.model, 'get_draft_url'):
-            super(DraftAdmin, self).get_urls()
-
-        return patterns('',
-                        url(r'^(.+)/preview/$',
-                            wrap(self.preview_view),
-                            name='%s_%s_preview' % info),
-                        ) + super(DraftAdmin, self).get_urls()
+        return [
+            url(
+                r'^(.+)/preview/$',
+                wrap(self.preview_view),
+                name='%s_%s_preview' % info
+            ),
+        ] + super(DraftAdmin, self).get_urls()
 
     def preview_view(self, request, *args, **kwargs):
         model = self.model
@@ -46,20 +52,19 @@ class DraftAdmin(admin.ModelAdmin):
             raise Http404
 
         # Work with related formsets (collection instances)
-        inline_instances = self.get_inline_instances(request, obj)
         prefixes = {}
         items = {}
-        for FormSet, inline in zip(self.get_formsets(request, obj), inline_instances):
-            prefix = FormSet.get_default_prefix()
+        for formset, inline in self.get_formsets_with_inlines(request, obj):
+            prefix = formset.get_default_prefix()
             prefixes[prefix] = prefixes.get(prefix, 0) + 1
             if prefixes[prefix] != 1 or not prefix:
                 prefix = "%s-%s" % (prefix, prefixes[prefix])
 
-            formset = FormSet(request.POST, request.FILES,
+            formset = formset(request.POST, request.FILES,
                               instance=obj, prefix=prefix,
                               queryset=inline.get_queryset(request))
 
-            items[FormSet.get_default_prefix()] = [
+            items[formset.get_default_prefix()] = [
                 f.save(commit=False) for f in formset
                 if f.is_valid()]
 
@@ -88,7 +93,6 @@ class DraftAdmin(admin.ModelAdmin):
                 form.instance.get_absolute_url() + '?hash=' + file_hash)
 
         return HttpResponse(str(form.errors))
-
 
     class Media:
         js = ('admin/light.draft.js',)
