@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-light-draft',
-    version='0.3.1',
+    version='0.4.0',
     author='Vladimir Savin',
     author_email='zero13cool@yandex.ru',
 
@@ -23,6 +23,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
 
         'Framework :: Django',
         'Environment :: Web Environment',
