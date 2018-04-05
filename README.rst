@@ -1,6 +1,8 @@
 django-light-draft
 ==================
 
+[![Build Status](https://travis-ci.org/zerc/django-light-draft.svg?branch=master)](https://travis-ci.org/zerc/django-light-draft)
+
 Preview model changes without saving the data into the database.
 
 Install
