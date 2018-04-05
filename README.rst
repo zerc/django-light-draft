@@ -3,6 +3,9 @@ django-light-draft
 
 .. image:: https://travis-ci.org/zerc/django-light-draft.svg?branch=master
     :target: https://travis-ci.org/zerc/django-light-draft
+.. image:: https://codecov.io/gh/zerc/django-light-draft/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/zerc/django-light-draft
+  
 
 Preview model changes without saving the data into the database.
 
