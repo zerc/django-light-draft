@@ -10,4 +10,4 @@ install:
   - pip install codecov
   - python setup.py install
 
-script: cd example && python manage.py test && codecov
+script: cd example && coverage run manage.py test && codecov
