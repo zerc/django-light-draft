@@ -15,7 +15,7 @@ setup(
     packages=find_packages(exclude=['ez_setup', 'tests', 'tests.*']),
     include_package_data=True,
     install_requires=[
-        'django>=1.8,<2.0',
+        'django>=1.8',
     ],
 
     classifiers=[

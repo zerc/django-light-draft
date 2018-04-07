@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import re
 
 from django.test import TestCase
-from django.utils.text import force_text
+from django.utils.encoding import force_text
 
 try:
     from django.urls import reverse

@@ -1,13 +1,13 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
-
-
-nullable = dict(blank=True, null=True)
 
 
 @python_2_unicode_compatible
@@ -42,7 +42,7 @@ class BlogPost(models.Model):
     body = models.TextField('body')
 
     category = models.ForeignKey(
-        Category, related_name='blog_posts', **nullable)
+        Category, related_name='blog_posts', blank=True, null=True, on_delete=models.PROTECT)
 
     tags = models.ManyToManyField(Tag, related_name='blog_post')
 
@@ -59,7 +59,7 @@ class BlogPost(models.Model):
 
 @python_2_unicode_compatible
 class TextBlock(models.Model):
-    blog_post = models.ForeignKey(BlogPost, related_name='blocks')
+    blog_post = models.ForeignKey(BlogPost, related_name='blocks', on_delete=models.PROTECT)
 
     title = models.CharField('title', max_length=255)
     body = models.TextField('body')
