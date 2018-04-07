@@ -1,9 +1,13 @@
 language: python
 
-python:
-  - "2.7"
-  - "3.5"
-  - "3.6"
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=py27-django18,py27-django19,py27-django10,py27-django11
+    - python: 3.5
+      env: TOXENV=py35-django20
+    - python: 3.6
+      env: TOXENV=py36-django20
 
 install:
   - pip install codecov tox
