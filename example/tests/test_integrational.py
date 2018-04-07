@@ -23,11 +23,17 @@ class DraftLogicTestCase(TestCase):
         cls.post = f.BlogPostFactory(tags_count=2, blocks_count=2)
         cls.admin_change_url = reverse('admin:blog_blogpost_change', args=(cls.post.pk,))
         cls.admin_preview_url = reverse('admin:blog_blogpost_preview', args=(cls.post.pk,))
-        cls.admin_user = f.UserFactory()
+        cls.admin_user = f.UserFactory(username='admin')
+        cls.admin_user.set_password('admin')
+        cls.admin_user.save()
 
     def setUp(self):
         super(DraftLogicTestCase, self).setUp()
-        self.client.force_login(self.admin_user)
+        # Use `client.force_login` only after removing support of Django 1.8.x
+        if hasattr(self.client, 'force_login'):
+            self.client.force_login(self.admin_user)
+        else:
+            self.client.login(username='admin', password='admin')
 
     def test_everything(self):
         """Check that everything works."""
