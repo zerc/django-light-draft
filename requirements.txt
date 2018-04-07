@@ -24,3 +24,4 @@ text-unidecode==1.2
 traitlets==4.3.2
 wcwidth==0.1.7
 coverage==4.5.1
+tox==3.0.0
