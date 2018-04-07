@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import re
 
 from django.test import TestCase
+from django.utils.text import force_text
 
 try:
     from django.urls import reverse
@@ -68,14 +69,17 @@ class DraftLogicTestCase(TestCase):
         }
         response = self.client.post(self.admin_preview_url, post_data)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.content.startswith('{}?hash='.format(self.post.get_absolute_url())),
-                        response.content)
+
+        content = force_text(response.content)
+
+        self.assertTrue(
+            content.startswith('{}?hash='.format(self.post.get_absolute_url())),
+            content)
 
         # Changes are on the page
-        page_url = response.content
-        response = self.client.get(page_url)
+        response = self.client.get(content)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(re.findall('<h1>\s+Hello\n', response.content))
+        self.assertTrue(re.findall('<h1>\s+Hello\n', force_text(response.content)))
 
         # But not in the database
         post = type(self.post).objects.get(pk=self.post.pk)

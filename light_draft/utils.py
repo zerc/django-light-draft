@@ -2,7 +2,12 @@
 from __future__ import unicode_literals
 
 import os
-import cPickle as pickle
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 from uuid import uuid4
 
 from django.db.models.fields.related import RelatedField
