@@ -2,24 +2,27 @@ django-light-draft
 ==================
 
 .. image:: https://travis-ci.org/zerc/django-light-draft.svg?branch=master
-    :target: https://travis-ci.org/zerc/django-light-draft
+  :target: https://travis-ci.org/zerc/django-light-draft
 .. image:: https://codecov.io/gh/zerc/django-light-draft/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/zerc/django-light-draft
   
+Preview model changes without saving them into the database. 
 
-Preview model changes without saving the data into the database.
+Requirements:
 
-Install
--------
+* Django >= 1.8.x
+* Python >= 2.7.x
 
-Usual way:
+Quickstart
+----------
 
-::
+Instal the package via ``pip``:
+
+.. code:: shell
 
     pip install django-light-draft
 
-
-Edit your settings.py:
+Add it to the ``settings.py`` of your project:
 
 .. code:: python
 
@@ -27,13 +30,11 @@ Edit your settings.py:
         ...
 
         'light_draft',
-
     )
 
+To enable the feature for a particular model you need to make sure:
 
-Then you just need to inherit admin and detail views like this:
-
-admin.py:
+1. The admin model has been inherited from ``light_draft.admin.DraftAdmin``:
 
 .. code:: python
 
@@ -42,7 +43,7 @@ admin.py:
     class MyModelAdmin(DraftAdmin):
         ...
 
-views.py
+2. The detail view of your model has been inherited from ``light_draft.views.BaseDraftView``:
 
 .. code:: python
 
@@ -51,11 +52,73 @@ views.py
     class MyModelDetailView(BaseDraftView):
         ...
 
+3. The model has ``.get_absolute_url()`` method defined.
 
-See **example/blog** app for more details.
+See ``example/blog`` app for more details.
 
 
-NOTES
------
+Contributing
+------------
 
-1. Your models have to define their own  **.get_absoulte_url** method.
+1. Fork the ``django-light-draft`` repo on GitHub.
+2. Clone your fork locally:
+
+.. code:: shell
+
+    git clone git@github.com:your_name_here/django-light-draft.git
+
+3. Install and activate a virtual environment e.g. via ``virtualenv``:
+
+.. code:: shell
+
+    cd django-light-draft/
+    virtualenv venv
+    source venv/bin/activate
+
+4. Install the package for local development and all other dependencies (required to make the ``example`` work and run tests):
+
+.. code:: shell
+
+    python setup.py develop
+    pip install pip --upgrade
+    pip install -r requirements.txt
+
+5. Create a branch for local development:
+
+.. code:: shell
+
+    git checkout -b name-of-your-bugfix-or-feature
+
+6. Hack things!
+
+7. When you're done making changes, check that your changes pass the tests, including testing other Python versions with ``tox``:
+
+.. code:: shell
+
+    tox
+
+To make all ``tox`` tests pass you need to make sure that you have all python versions listed in ``tox.ini`` installed in your system.
+If, for some reason, you are not able to get them all, at least make sure that the tests pass for your current environment:
+
+.. code:: shell
+
+    cd example
+    python manage.py test
+
+8. Commit your changes:
+
+.. code:: shell
+
+    git add .
+    git commit -m "Detailed description of your changes."
+    git push origin name-of-your-bugfix-or-feature
+
+9. Submit a pull request through the GitHub website.
+
+
+Licence & Authors
+-----------------
+
+The MIT License (MIT)
+
+Copyright (c) 2014 Vladimir Savin.
