@@ -27,8 +27,7 @@ Add it to the ``settings.py`` of your project:
 .. code:: python
 
     INSTALLED_APPS = (
-        ...
-
+        ...,
         'light_draft',
     )
 
@@ -79,10 +78,8 @@ Contributing
 
 .. code:: shell
 
-    python setup.py develop
-    pip install pip --upgrade
-    pip install -r requirements.txt
-
+    make install-dev
+    
 5. Create a branch for local development:
 
 .. code:: shell
@@ -95,15 +92,14 @@ Contributing
 
 .. code:: shell
 
-    tox
+    make test-all
 
 To make all ``tox`` tests pass you need to make sure that you have all python versions listed in ``tox.ini`` installed in your system.
 If, for some reason, you are not able to get them all, at least make sure that the tests pass for your current environment:
 
 .. code:: shell
-
-    cd example
-    python manage.py test
+    
+    make test
 
 8. Commit your changes:
 
