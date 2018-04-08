@@ -32,10 +32,10 @@ dist: clean
 	python setup.py sdist
 	ls -l dist
 
-install: clean
+install: 
 	python setup.py install
 
-run: clean
+run: 
 	python example/manage.py runserver 0.0.0.0:8000
 
 test: clean
