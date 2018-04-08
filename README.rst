@@ -6,7 +6,7 @@ django-light-draft
 .. image:: https://codecov.io/gh/zerc/django-light-draft/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/zerc/django-light-draft
   
-Preview model changes without saving them into the database. 
+Preview model changes without saving them into the database.  `Watch a demo <https://youtu.be/3pszDTUIfmg>`_ on YouTube.
 
 Requirements:
 
