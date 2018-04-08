@@ -1,5 +1,6 @@
 # coding: utf-8
 from __future__ import unicode_literals
+import random
 
 try:
     from django.urls import reverse
@@ -33,6 +34,11 @@ class Tag(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def colour_class(self):
+        """Return a random CSS class for the tag."""
+        choices = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark']
+        return random.choice(choices)
 
 @python_2_unicode_compatible
 class BlogPost(models.Model):

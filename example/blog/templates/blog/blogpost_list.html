@@ -1,16 +1,20 @@
-<html>
-<head>
-    <title>Example blog app</title>
-</head>
-<body>
-    <h1>Blog posts</h1>
+{% extends "blog/base.html" %}
 
-    <ul>
+{% block title %}Example blog app{% endblock %}
+
+{% block content %}
+    <h1>Funny stories of my life</h1>
+    <hr>
     {% for post in posts %}
-        <li>
-            <a href="{{ post.get_absolute_url }}">{{ post }}</a>
-        </li>
+          <h4><a href="{{ post.get_absolute_url }}">
+            {{ post|title }}
+          </a></h4>
     {% endfor %}
-    </ul>
-</body>
-</html>
+    <hr>
+    <p class="text-muted">
+      This is an example of blog application to demonstrate how
+      <a href="https://github.com/zerc/django-light-draft" target="_blank">
+        django-light-draft
+      </a> package works. Please select a post from the list above.
+    </p>
+{% endblock %}

@@ -1,38 +1,58 @@
-<html>
-<head>
-    <title>{{ post }} :: Example blog app</title>
-</head>
-<body>
-    <a href="{% url 'posts_list' %}">
-        Blog list
-    </a> &mdash; {{ post }}
+{% extends "blog/base.html" %}
 
-    <br>
+{% block title %}{{ post|title }} :: Example blog app{% endblock %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Posts</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ post|title }}</li>
+    </ol>
+  </nav>
 
     <h1>
-        {{ post }}
-        <small style="font-size:12px;">{{ post.category|default:'' }}</small>
-        <div  style="font-size:12px;">
-            {% for tag in post.tags.all %}
-                {{ tag }}
-                {% if not forloop.last %},{% endif %}
-            {% endfor %}
-        </div>
+        {{ post|title }}
+        <span class="badge badge-secondary">
+          {{ post.category|default:'' }}
+        </span>
     </h1>
 
-    {{ post.lead|safe }}
+    {% if request.user.is_staff %}
+      <div class="float-right">
+        <a href="{% url 'admin:blog_blogpost_change' post.pk %}" target="_blank">
+          Change
+        </a>
+      </div>
+    {% endif %}
 
+    {% for tag in post.tags.all %}
+      <span class="badge badge-{{ tag.colour_class }}">
+        {{ tag }}
+      </span>
+    {% endfor %}
+
+    <hr>
+    <p class="text-left">
+      {{ post.lead|safe }}
+    </p>
     <hr>
 
     {{ post.body|safe }}
 
     {% for text_block in post.blocks.all %}
         {% if forloop.first %}
-            <h2>Extra information</h2>
+          <br><br>
         {% endif %}
-        <h4>{{ text_block }}</h4>
-        <p>{{ text_block.body }}</p>
-        <hr>
+        <div class="card">
+          <div class="card-header">
+            {{ text_block|title }}
+          </div>
+          <div class="card-body">
+            <p class="card-text">{{ text_block.body }}</p>
+          </div>
+        </div>
+        {% if not forloop.last %}
+          <br>
+        {% endif %}
     {% endfor %}
-</body>
-</html>
+{% endblock %}
