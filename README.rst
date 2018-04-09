@@ -1,5 +1,5 @@
-django-light-draft
-==================
+.. image:: https://raw.githubusercontent.com/zerc/django-light-draft/master/example/blog/static/images/DLD.png
+   :alt: Django Light Draft
 
 .. image:: https://travis-ci.org/zerc/django-light-draft.svg?branch=master
   :target: https://travis-ci.org/zerc/django-light-draft
