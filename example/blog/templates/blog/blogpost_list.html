@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% load static %}
 
 {% block title %}Example blog app{% endblock %}
 
@@ -16,5 +17,8 @@
       <a href="https://github.com/zerc/django-light-draft" target="_blank">
         django-light-draft
       </a> package works. Please select a post from the list above.
+    </p>
+    <p class="text-center">
+      <img src="{% static "images/DLD.png" %}" alt="Django Light Draft" />
     </p>
 {% endblock %}
