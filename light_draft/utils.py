@@ -15,12 +15,7 @@ from django.forms.models import model_to_dict
 from django.core.cache import caches
 
 from .settings import DRAFT_TMP_DIR, DRAFT_SETTINGS
-
-class DraftBaseError(Exception):
-    """Base error class for all the errors raised by the application."""
-
-class CacheMissError(DraftBaseError):
-    """Snapshot was not found."""
+from .exceptions import CacheMissError
 
 
 def make_cache_key(instance):

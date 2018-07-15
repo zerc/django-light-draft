@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 from django.http import Http404
 from django.views.generic.detail import DetailView
 
-from .utils import load_from_shapshot, DraftBaseError
+from .utils import load_from_shapshot
+from .exceptions import DraftError
 
 
 class BaseDraftView(DetailView):
@@ -25,7 +26,7 @@ class BaseDraftView(DetailView):
             try:
                 self.__object = load_from_shapshot(
                     self.model, self.request.GET.get('hash'))
-            except DraftBaseError:
+            except DraftError:
                 raise Http404('Snapshot does not exist')
             return self.__object
 
