@@ -1,5 +1,5 @@
 # coding: utf-8
-"""Integrational tests."""
+"""Functional tests."""
 from __future__ import unicode_literals
 import re
 
@@ -78,9 +78,12 @@ class DraftLogicTestCase(TestCase):
 
         content = force_text(response.content)
 
-        self.assertTrue(
-            content.startswith('{}?hash='.format(self.post.get_absolute_url())),
-            content)
+        self.assertTrue(content.startswith(
+            '{url}?hash=blog:blogpost:{pk}'.format(
+                url=self.post.get_absolute_url(),
+                pk=self.post.pk
+            )), content
+        )
 
         # Changes are on the page
         response = self.client.get(content)

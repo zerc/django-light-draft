@@ -12,58 +12,60 @@ from uuid import uuid4
 
 from django.db.models.fields.related import RelatedField
 from django.forms.models import model_to_dict
+from django.core.cache import caches
 
-from .settings import DRAFT_TMP_DIR
+from .settings import DRAFT_TMP_DIR, DRAFT_SETTINGS
+
+class DraftBaseError(Exception):
+    """Base error class for all the errors raised by the application."""
+
+class CacheMissError(DraftBaseError):
+    """Snapshot was not found."""
+
+
+def make_cache_key(instance):
+    """Construct a cache key for the instance."""
+    prefix = '{}:{}:{}'.format(
+        instance._meta.app_label,
+        instance._meta.model_name,
+        instance.pk
+    )
+    return '{}:{}'.format(prefix, str(uuid4()))
 
 
 def save_model_snapshot(instance, related_objects=None):
-    """
-    Serialize instance into .pickle cache file
-    """
-    parts = (
-        DRAFT_TMP_DIR,
-        instance._meta.app_label,
-        instance._meta.model_name
-    )
-
-    # Create all necessary dirs
-    prev = ''
-    for part in parts:
-        path = os.path.join(prev, part)
-        if not os.path.exists(path):
-            os.mkdir(path)
-        prev = path
-
-    file_hash = str(uuid4())
-
+    """Serialize the instance given."""
+    key = make_cache_key(instance)
     data = {'instance': instance, 'related_objects': related_objects}
-
-    with open(os.path.join(prev, file_hash), 'wb') as f:
-        pickle.dump(data, f)
-
-    return file_hash
+    cache = caches[DRAFT_SETTINGS['cache_name']]
+    cache.set(key, pickle.dumps(data), DRAFT_SETTINGS['ttl'])
+    return key
 
 
-def load_from_shapshot(model, file_hash):
+def load_from_shapshot(model, key):
     """
-    Load data from models .pickle snapshot
+    Load data from the snapshot stored.
+
+    If the value is not in cache then fallback to the old (file-based) method.
     """
-    path = os.path.join(
-        DRAFT_TMP_DIR,
-        model._meta.app_label,
-        model._meta.model_name,
-        file_hash
-    )
+    # New way of doing things
+    if key.startswith(model._meta.app_label):
+        cache = caches[DRAFT_SETTINGS['cache_name']]
+        try:
+            data = pickle.loads(cache.get(key))
+        except TypeError:
+            raise CacheMissError(key)
+    else:
+        # Old way. Deprecated.
+        path = os.path.join(
+            DRAFT_TMP_DIR,
+            model._meta.app_label,
+            model._meta.model_name,
+            key
+        )
+        with open(path, 'rb') as f:
+            data = pickle.load(f)
 
-    with open(path, 'rb') as f:
-        raw_data = pickle.load(f)
-
-    instance = raw_data.pop('instance')
-    related_objects = raw_data.pop('related_objects')
-    instance._prefetched_objects_cache = related_objects
-
-    # if related_objects:
-    #     for k, v in related_objects.items():
-    #         setattr(instance, '{}__draft'.format(k), v)
-
+    instance = data.pop('instance')
+    instance._prefetched_objects_cache = data.pop('related_objects')
     return instance
