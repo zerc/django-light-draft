@@ -55,17 +55,26 @@ def load_from_shapshot(model, key):
             data = pickle.loads(cache.get(key))
         except TypeError:
             raise CacheMissError(key)
+    # Old way. Deprecated.
     else:
-        # Old way. Deprecated.
-        path = os.path.join(
-            DRAFT_TMP_DIR,
-            model._meta.app_label,
-            model._meta.model_name,
-            key
-        )
-        with open(path, 'rb') as f:
-            data = pickle.load(f)
+        data = _get_data_old(model, key)
 
     instance = data.pop('instance')
     instance._prefetched_objects_cache = data.pop('related_objects')
     return instance
+
+
+def _get_data_old(model, key):
+    """DEPERECATED."""
+    path = os.path.join(
+        DRAFT_TMP_DIR,
+        model._meta.app_label,
+        model._meta.model_name,
+        key
+    )
+
+    try:
+        with open(path, 'rb') as f:
+            return pickle.load(f)
+    except IOError:
+        raise CacheMissError(path)

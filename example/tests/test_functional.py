@@ -5,6 +5,7 @@ import re
 
 from django.test import TestCase
 from django.utils.encoding import force_text
+from parameterized import parameterized
 
 try:
     from django.urls import reverse
@@ -76,20 +77,30 @@ class DraftLogicTestCase(TestCase):
         response = self.client.post(self.admin_preview_url, post_data)
         self.assertEqual(response.status_code, 200)
 
-        content = force_text(response.content)
+        url = force_text(response.content)
 
-        self.assertTrue(content.startswith(
+        self.assertTrue(url.startswith(
             '{url}?hash=blog:blogpost:{pk}'.format(
                 url=self.post.get_absolute_url(),
                 pk=self.post.pk
-            )), content
+            )), url
         )
 
         # Changes are on the page
-        response = self.client.get(content)
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(re.findall('<h1>\s+Hello\n', force_text(response.content)))
 
         # But not in the database
         post = type(self.post).objects.get(pk=self.post.pk)
         self.assertNotEqual(post.title, 'Hello')
+
+    @parameterized.expand([
+        ('something',),  # old key
+        ('blog:blogpost:1:something',)
+    ])
+    def test_cache_miss(self, key):
+        """Check the case when the cache key does not exist."""
+        url = '{}?hash={}'.format(self.post.get_absolute_url(), key)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
