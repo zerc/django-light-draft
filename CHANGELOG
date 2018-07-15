@@ -1,3 +1,9 @@
+0.6
+- Django Cache Framework instead of custom files-based solution.
+  The old way is deprecated. All new writes go to the cache specified.
+  Depending on the hash provided read will be done either from cache
+  or from the old location.
+
 0.5
 - Support Python3 and Django 2.0.x
 

@@ -22,7 +22,7 @@ Instal the package via ``pip``:
 
     pip install django-light-draft
 
-Add it to the ``settings.py`` of your project:
+Add next lines to the ``settings.py`` of your project:
 
 .. code:: python
 
@@ -31,7 +31,26 @@ Add it to the ``settings.py`` of your project:
         'light_draft',
     )
 
-To enable the feature for a particular model you need to make sure:
+    # Default settings. If you are happy with them - you can omit them.
+    DRAFT_SETTINGS = {
+        'cache_name': 'default',  # or any other cache you may have
+        'ttl': 60*5,
+    }
+
+
+To make it work, you need to have at least ``default`` cache defined. If you are not familiar with this term check out `documentation <https://docs.djangoproject.com/en/2.0/topics/cache/>`_. In simpliest case you can enable in memory like this:
+
+.. code:: python
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'just-an-example',
+        }
+    }
+
+
+Then, in order to enable the feature for a particular model you need to make sure:
 
 1. The admin model has been inherited from ``light_draft.admin.DraftAdmin``:
 
