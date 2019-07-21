@@ -1,6 +1,11 @@
 dist: xenial  # for Python3.7+
 language: python
 
+env:
+  - MOZ_HEADLESS=1
+addons:
+  firefox: latest
+
 matrix:
   include:
     - python: 2.7
@@ -13,6 +18,6 @@ matrix:
       env: TOXENV=py37-django20,py37-django21,py37-django22
 
 install:
-  - pip install codecov tox
+  - pip install codecov tox selenium
 
 script: tox && codecov
