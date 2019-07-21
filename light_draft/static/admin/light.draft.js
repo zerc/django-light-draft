@@ -1,7 +1,21 @@
 (function ($) {
     $(function () {
         var href = location.href.replace(/(\/change\/?$|\/$)/, '') + '/preview/',  // TODO: generate an URL
-            button = $('<li><a href="'+href+'" class="previewlink" target="_blank">Draft preview</a></li>');
+            button = $('<li><a href="'+href+'" class="previewlink" target="_blank">Draft preview</a></li>'),
+            csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
 
         $('.object-tools > li > a.viewsitelink')
             .closest('ul')
@@ -9,7 +23,7 @@
             .before(button);
 
         button.click(function () {
-            var form = $('form[method="post"][enctype="multipart/form-data"]'),
+            var form = $('form[method="post"]'),
                 m2m = form.find('select[multiple="multiple"][id$="_to"]'),
                 link;
 

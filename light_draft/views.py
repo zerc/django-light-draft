@@ -32,7 +32,19 @@ class BaseDraftView(DetailView):
 
         return super(BaseDraftView, self).get_object(*args, **kwargs)
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(BaseDraftView, self).get_context_data(*args, **kwargs)
-        context['is_draft_preview'] = True
-        return context
+
+class DraftAPIViewMixin:
+
+    def get_object(self, *args, **kwargs):
+        if getattr(self, '__object', None):
+            return self.__object
+
+        if 'hash' in self.request.GET:
+            try:
+                self.__object = load_from_shapshot(
+                    self.serializer_class.Meta.model, self.request.GET.get('hash'))
+            except DraftError:
+                raise Http404('Snapshot does not exist')
+            return self.__object
+
+        return super().get_object(*args, **kwargs)
