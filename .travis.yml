@@ -1,3 +1,4 @@
+dist: xenial  # for Python3.7+
 language: python
 
 matrix:
