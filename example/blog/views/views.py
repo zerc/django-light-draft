@@ -6,7 +6,7 @@ from light_draft.views import BaseDraftView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
-from .models import BlogPost
+from blog.models import BlogPost
 
 
 class BlogPostListView(ListView):
