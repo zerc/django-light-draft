@@ -3,6 +3,7 @@ import time
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.firefox.options import Options
 
 from tests import factories as f
 
@@ -26,7 +27,9 @@ class DraftTestCase(StaticLiveServerTestCase):
 
     def setUp(self):
         super(DraftTestCase, self).setUp()
-        self.selenium = webdriver.Firefox()
+        options = Options()
+        options.add_argument('-headless')
+        self.selenium = webdriver.Firefox(firefox_options=options)
         self.selenium.get('{}/admin/'.format(self.live_server_url))
         self.assertEqual('{}/admin/login/?next=/admin/'.format(self.live_server_url), self.selenium.current_url)
         self.selenium.find_element_by_name('username').send_keys('admin')
