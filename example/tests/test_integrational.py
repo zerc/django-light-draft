@@ -1,5 +1,6 @@
 import time
 
+from django import VERSION
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -56,7 +57,13 @@ class DraftTestCase(StaticLiveServerTestCase):
 
         draft_element = draft_element[0]
         draft_element.is_displayed()
-        self.assertEqual(draft_element.text, 'DRAFT PREVIEW')
+
+        if VERSION[:2] == (1, 8):
+            expected_title = 'Draft preview'
+        else:
+            expected_title = 'DRAFT PREVIEW'
+
+        self.assertEqual(draft_element.text, expected_title)
 
         draft_element.click()
         self.selenium.switch_to_window(self.selenium.window_handles[1])
