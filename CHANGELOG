@@ -1,3 +1,8 @@
+0.6.1
+- Fixed bug with missing CSRF token in Django 2.x
+- Added integrational tests
+- Added `VERSION` variable 
+
 0.6
 - Django Cache Framework instead of custom files-based solution.
   The old way is deprecated. All new writes go to the cache specified.
