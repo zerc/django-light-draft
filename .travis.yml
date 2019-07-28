@@ -26,4 +26,4 @@ install:
 script: tox
 
 after_success:
-  - codecov
+  - cd example && codecov
