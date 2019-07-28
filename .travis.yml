@@ -23,4 +23,7 @@ install:
   - export PATH=$PATH:$PWD/geckodriver
   - geckodriver --version
 
-script: tox && codecov
+script: tox
+
+after_success:
+  - codecov
