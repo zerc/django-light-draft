@@ -6,7 +6,7 @@ enum34==1.1.6
 factory-boy==2.10.0
 Faker==0.8.12
 ipaddress==1.0.19
-ipython==5.5.0
+ipython==8.10.0
 ipython-genutils==0.2.0
 pathlib2==2.3.0
 pexpect==4.3.1
